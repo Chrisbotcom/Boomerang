@@ -1,0 +1,98 @@
+name: Boomerang
+version: 3.1
+description: Essential commands for Chrisbot MC server.
+author: Chrisbotcom
+website: https://github.com/Chrisbotcom/Boomerang
+
+main: io.github.chrisbotcom.boomerang.Boomerang
+database: false
+
+commands:
+    setworldspawn:
+        description: Set world spawn for new players.
+        usage: /<command>
+        permission: boomerang.setworldspawn
+        permission-message: You don't have <permission>
+    spawn:
+        description: Teleport to spawn.
+        usage: /<command>
+    reload:
+        description: Reload configurations.
+        usage: /<command> [configuration]
+        permission: boomerang.reload
+    sethome:
+        description: Set a home.
+        usage: /<command> name
+    delhome:
+        description: Delete a home.
+        usage: /<command> [name]
+    home:
+        description: List homes or teleport to a home if name is specified.
+        usage: /<command> [name]
+    tprequest:
+        aliases: tpr
+        description: Request to teleport to another player.
+        usage: /<command> player
+    tphere:
+        aliases: tph
+        description: Request a player to teleport to you.
+        usage: /<command> player
+    tpdeny:
+        aliases: [tpd, tpno, tpn]
+        description: Deny a teleport request from another player.
+        usage: /<command> [player]
+    tpaccept:
+        aliases: [tpa, tpyes, tpy]
+        description: Accept a teleport request from another player.
+        usage: /<command> [player]
+    tplist:
+        aliases: tpl
+        description: List pending teleport requests.
+        usage: /<command>
+    tpcancel:
+        aliases: tpc
+        description: Cancel pending teleport request.
+        usage: /<command>
+    mute:
+        description: Mute a player in chat.
+        usage: /<command> player
+        permission: boomerang.mute
+        permission-message: You don't have <permission>
+    unmute:
+        description: Unmute a player in chat or list muted players.
+        usage: /<command> [player]
+        permission: boomerang.mute
+        permission-message: You don't have <permission>
+    nightvision:
+        aliases: nv
+        description: Toggle night vision.
+        usage: /<command>
+        permission: boomerang.nightvision
+        permission-message: You don't have <permission>
+    fly:
+        description: Toggle flight.
+        usage: /<command>
+        permission: boomerang.fly
+        permission-message: You don't have <permission>
+
+permissions:
+    boomerang.*:
+        description: Gives access to all Boomerang commands
+        children:
+            boomerang.setworldspawn: true
+            boomerang.reload: true
+    boomerang.setworldspawn:
+        description: Allows you to set world spawn location.
+        default: op
+    boomerang.reload:
+        description: Allows you to reload Boomerang settings.
+        default: op
+    boomerang.mute:
+        description: Allows you to mute or unmute a player.
+        default: op
+    boomerang.nightvision:
+        description: Allows you to toggle night vision.
+        default: op
+    boomerang.fly:
+        description: Allows you to toggle flight for a player.
+        default: op

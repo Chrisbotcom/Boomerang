@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Boomerang" default="deploy">
+    <target name="deploy" depends="package">
+        <echo>Hello World - Welcome to Apache Ant!</echo>
+    </target>
+   
+    <target name="package" depends="clean,compile">
+        ....
+    </target>
+
+    <target name="clean" >
+        ....
+    </target>
+
+    <target name="compile" >
+        ....
+    </target>
+
+</project>
