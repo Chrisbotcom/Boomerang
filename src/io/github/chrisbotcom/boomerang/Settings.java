@@ -8,6 +8,7 @@ package io.github.chrisbotcom.boomerang;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,11 +148,16 @@ public final class Settings {
         return location;
     }
 
+    public void removeHome(Player player, String home) {
+        Map<String, Location> playerHomes = this.homes.get(player.getUniqueId());
+        playerHomes.remove(home);
+    }
+
     public Set<String> getHomes(Player player) {
         if (this.homes.containsKey(player.getUniqueId())) {
             return this.homes.get(player.getUniqueId()).keySet();
         } else {
-            return null;
+            return Collections.emptySet();
         }
     }
 

@@ -6,22 +6,12 @@
 package io.github.chrisbotcom.boomerang.commands;
 
 import io.github.chrisbotcom.boomerang.Boomerang;
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 /**
  *
@@ -43,33 +33,22 @@ public class CommandDelHome implements CommandExecutor {
         }
 
         Player player = (Player) sender;
+        Set<String> set = plugin.getSettings().getHomes(player);
 
-        try {
-            File dataFolder = this.plugin.getDataFolder();
-            File homesFolder = new File(dataFolder, "homes");
-            File playerHomesFile = new File(homesFolder, player.getUniqueId().toString() + ".yml");
-
-            if (playerHomesFile.exists() && (playerHomesFile.length() > 0)) {
-                YamlConfiguration homesConfig = new YamlConfiguration();
-                homesConfig.load(playerHomesFile);
-                Set<String> homes = homesConfig.getKeys(false);
-                if (args.length == 0) {
-                    player.sendMessage(String.format(ChatColor.YELLOW + "Home(s): %s", Arrays.toString(homes.toArray()).replaceAll("[\\[\\]]", "")));
-                } else {
-                    String home = args[0].toLowerCase();
-                    if (homes.contains(args[0].toLowerCase())) {
-                        homesConfig.set(home, null);
-                        homesConfig.save(playerHomesFile);
-                        player.sendMessage(ChatColor.YELLOW + "Home '" + home + "' deleted.");
-                    } else {
-                        player.sendMessage(ChatColor.YELLOW + "Home '" + home + "' not found. To set a home, type " + ChatColor.ITALIC + "/sethome.");
-                    }
-                }
+        if (args.length == 0) {
+            if (set != null) {
+                player.sendMessage(String.format(ChatColor.YELLOW + "Home(s): %s", set.toString().replaceAll("[\\[\\]]", "")));
             } else {
-                player.sendMessage(ChatColor.YELLOW + "No homes set. To set a home, type " + ChatColor.ITALIC + "/sethome.");
+                player.sendMessage(ChatColor.YELLOW + "You have no homes set. To set a home type /sethome.");
             }
-        } catch (IOException | InvalidConfigurationException ex) {
-            Logger.getLogger(CommandDelHome.class.getName()).log(Level.SEVERE, null, ex);
+        } else {
+            String home = args[0].toLowerCase();
+            if (set.contains(home)) {
+                plugin.getSettings().removeHome(player, home);
+                player.sendMessage(ChatColor.YELLOW + "Home '" + home + " has been removed.");
+            } else {
+                player.sendMessage(ChatColor.YELLOW + "Home '" + home + "' not found. To set a home, type " + ChatColor.ITALIC + "/sethome.");
+            }
         }
         
         return true;
