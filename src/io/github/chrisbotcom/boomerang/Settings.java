@@ -5,6 +5,7 @@
  */
 package io.github.chrisbotcom.boomerang;
 
+import io.github.chrisbotcom.boomerang.types.SelectionType;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,7 +41,13 @@ public final class Settings {
     private int tprequest_expire = 30;
     private int tprequest_cooldown = 20;
     private final Map<UUID, Map<String, Location>> homes;
-    private List<Player> muteList;
+    private final List<Player> muteList;
+    private final Map<UUID, SelectionType> pos;
+    private final int vote_listener_port;
+
+    public int getVoteListenerPort() {
+        return vote_listener_port;
+    }
 
     public int getMaxHomes() {
         return maxHomes;
@@ -57,6 +64,8 @@ public final class Settings {
         loadMaxHomes();
         this.tprequest_expire = config.getInt("tprequest_expire");
         this.tprequest_cooldown = config.getInt("tprequest_cooldown");
+        this.vote_listener_port = config.getInt("vote_listener_port");
+        pos = new HashMap<>();
     }
 
     public boolean isSpawnSet() {
@@ -220,5 +229,41 @@ public final class Settings {
 
     public List<Player> getMuteList() {
         return muteList;
+    }
+    
+    public Map<UUID, SelectionType> getPosSelections() {
+        return pos;
+    }
+    
+    public SelectionType getPosSelection(Player player) {
+        if (pos.containsKey(player.getUniqueId())) {
+            return pos.get(player.getUniqueId());
+        } else {
+            return null;
+        }
+    }
+    
+    public void removePosSelection(Player player) {
+        pos.remove(player.getUniqueId());
+    }
+
+    public void setPosSelection1(Player player, Vector pos1) {
+        SelectionType selection = getPosSelection(player);
+        if (selection == null) {
+            selection = new SelectionType();
+        } 
+        pos1 = new Vector(pos1.getBlockX(), pos1.getBlockY(), pos1.getBlockZ());
+        selection.setPos1(pos1.toBlockVector());
+        pos.put(player.getUniqueId(), selection);
+    }
+
+    public void setPosSelection2(Player player, Vector pos2) {
+        SelectionType selection = getPosSelection(player);
+        if (selection == null) {
+            selection = new SelectionType();
+        } 
+        pos2 = new Vector(pos2.getBlockX(), pos2.getBlockY(), pos2.getBlockZ());
+        selection.setPos2(pos2.toBlockVector());
+        pos.put(player.getUniqueId(), selection);
     }
 }

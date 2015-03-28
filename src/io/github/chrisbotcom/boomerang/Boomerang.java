@@ -8,6 +8,7 @@ package io.github.chrisbotcom.boomerang;
 import io.github.chrisbotcom.boomerang.commands.*;
 import io.github.chrisbotcom.boomerang.commands.tprequest.Requests;
 import io.github.chrisbotcom.boomerang.listeners.*;
+import io.github.chrisbotcom.boomerang.votelistener.VoteListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -29,7 +30,8 @@ public class Boomerang extends JavaPlugin implements Listener {
     public void onEnable() {
         settings = new Settings(this);
         settings.loadOnlinePlayersHomes();
-        //tpRequest = new TPRequest(this);
+        VoteListener voteListener = new VoteListener(this, settings.getVoteListenerPort());
+        voteListener.start();
 
         try {
             File dataFolder = this.getDataFolder();
@@ -49,7 +51,7 @@ public class Boomerang extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new ListenerPlayerPreprocessCommand(), this);
         getServer().getPluginManager().registerEvents(new ListenerPlayerRespawn(this), this);
         
-        //getServer().getPluginManager().registerEvents(new ListenerPlayerChatTabComplete(this), this);
+        getServer().getPluginManager().registerEvents(new ListenerPlayerChatTabComplete(this), this);
         //getServer().getPluginManager().registerEvents(new ListenerCreatureSpawn(this), this);
 
         getCommand("setworldspawn").setExecutor(new CommandSetWorldSpawn(this));
@@ -68,6 +70,10 @@ public class Boomerang extends JavaPlugin implements Listener {
         getCommand("nightvision").setExecutor(new CommandNightvision(this));
         getCommand("mute").setExecutor(new CommandMute(this));
         getCommand("unmute").setExecutor(new CommandUnmute(this));
+//        getCommand("pos").setExecutor(new CommandPos(this));
+//        getCommand("pos1").setExecutor(new CommandPos1(this));
+//        getCommand("pos2").setExecutor(new CommandPos2(this));
+//        getCommand("regen").setExecutor(new CommandRegen(this));
     }
 
     @Override

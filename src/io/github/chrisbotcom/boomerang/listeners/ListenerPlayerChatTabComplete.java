@@ -6,7 +6,11 @@
 package io.github.chrisbotcom.boomerang.listeners;
 
 import io.github.chrisbotcom.boomerang.Boomerang;
-import org.bukkit.ChatColor;
+import java.util.HashSet;
+import java.util.Set;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatTabCompleteEvent;
@@ -25,9 +29,15 @@ public class ListenerPlayerChatTabComplete implements Listener {
 
     @EventHandler
     public void onPlayerChatTabComplete(PlayerChatTabCompleteEvent e) {
-        e.getPlayer().sendMessage(String.format(ChatColor.GRAY + "message: %s", e.getChatMessage()));
-        e.getPlayer().sendMessage(String.format(ChatColor.GRAY + "completions: %s", e.getTabCompletions().toString().replaceAll("[\\[\\]]", "")));
-
+        String[] tokens = e.getChatMessage().split(" ");
+        Player player = e.getPlayer();
         
+        plugin.getLogger().info(e.getChatMessage());
+        
+        if (tokens[0].equalsIgnoreCase("/pos1")) {
+            Set<Material> set = new HashSet<>();
+            Block block = player.getTargetBlock(set, 100);
+            e.getTabCompletions().add(block.getLocation().toVector().toString());
+        }
     }
 }

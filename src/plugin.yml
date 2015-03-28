@@ -1,5 +1,5 @@
 name: Boomerang
-version: 3.1.1
+version: 3.3
 description: Essential commands for Chrisbot MC server.
 author: Chrisbotcom
 website: https://github.com/Chrisbotcom/Boomerang
@@ -75,6 +75,30 @@ commands:
         permission: boomerang.fly
         permission-message: You don't have <permission>
 
+#    pos1:
+#        description: Set the position of selection 1. If X, Y and Z are omitted, set the position to block standing on.
+#        usage: /<command> [X Y Z]
+#        permission: boomerang.pos
+#        permission-message: You don't have <permission>
+#
+#    pos2:
+#        description: Set the position of selection 2. If X, Y and Z are omitted, set the position to block standing on.
+#        usage: /<command> [X Y Z]
+#        permission: boomerang.pos
+#        permission-message: You don't have <permission>
+#
+#    pos:
+#        description: Show current position selection.
+#        usage: /<command>
+#        permission: boomerang.pos
+#        permission-message: You don't have <permission>
+#
+#    regen:
+#        description: Regenerate chunks defined by /pos selection.
+#        usage: /<command>
+#        permission: boomerang.regen
+#        permission-message: You don't have <permission>
+
 permissions:
     boomerang.*:
         description: Gives access to all Boomerang commands
@@ -94,5 +118,8 @@ permissions:
         description: Allows you to toggle night vision.
         default: op
     boomerang.fly:
-        description: Allows you to toggle flight for a player.
+        description: Allows you to select an area.
+        default: op
+    boomerang.pos:
+        description: Allows you to regenerate chunks defined by pos.
         default: op

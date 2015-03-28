@@ -26,6 +26,10 @@ public class CommandSetHome implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (sender == plugin.getServer().getConsoleSender()) {
+            sender.sendMessage(ChatColor.RED + "ERROR: sethome cannot be called from console.");
+            return true;
+        }
         if (args.length != 1) {
             sender.sendMessage(ChatColor.RED + "/sethome requires home name. You may set up to " + plugin.getSettings().getMaxHomes() + " homes.");
             return false;

@@ -30,6 +30,7 @@ public class ListenerPlayerQuit implements Listener {
         Player player = e.getPlayer();
 
         plugin.getSettings().removePlayerHomes(player);
+        plugin.getSettings().removePosSelection(player);
         
         String prefix = "";
         String suffix = "";

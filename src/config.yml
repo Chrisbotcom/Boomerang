@@ -1,3 +1,4 @@
 homes_max: 5
 tprequest_expire: 30
 tprequest_cooldown: 20
+vote_listener_port: 8194
