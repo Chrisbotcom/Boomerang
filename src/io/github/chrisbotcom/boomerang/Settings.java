@@ -45,14 +45,6 @@ public final class Settings {
     private final Map<UUID, SelectionType> pos;
     private final int vote_listener_port;
 
-    public int getVoteListenerPort() {
-        return vote_listener_port;
-    }
-
-    public int getMaxHomes() {
-        return maxHomes;
-    }
-
     public Settings(Boomerang plugin) {
         this.plugin = plugin;
         this.config = plugin.getConfig();
@@ -61,11 +53,20 @@ public final class Settings {
         config.options().copyDefaults(true);
         plugin.saveConfig();
         loadSpawnConfig();
-        loadMaxHomes();
+        initHomesFolder();
+        this.maxHomes = config.getInt("homes_max");
         this.tprequest_expire = config.getInt("tprequest_expire");
         this.tprequest_cooldown = config.getInt("tprequest_cooldown");
         this.vote_listener_port = config.getInt("vote_listener_port");
         pos = new HashMap<>();
+    }
+
+    public int getVoteListenerPort() {
+        return vote_listener_port;
+    }
+
+    public int getMaxHomes() {
+        return maxHomes;
     }
 
     public boolean isSpawnSet() {
@@ -102,14 +103,12 @@ public final class Settings {
         }
     }
 
-    private void loadMaxHomes() {
+    private void initHomesFolder() {
         File dataFolder = this.plugin.getDataFolder();
         File homesFolder = new File(dataFolder, "homes");
         if (!homesFolder.isDirectory()) {
             homesFolder.mkdir();
         }
-
-        this.maxHomes = config.getInt("homes_max");
     }
 
     public void loadOnlinePlayersHomes() {
@@ -184,7 +183,7 @@ public final class Settings {
         if (!this.homes.containsKey(player.getUniqueId())) {
             this.homes.put(player.getUniqueId(), map);
         } else {
-            this.homes.get(player.getUniqueId()).put(home, location);
+            this.homes.get(player.getUniqueId()).putAll(map);
         }
 
         new BukkitRunnable() {
@@ -195,17 +194,21 @@ public final class Settings {
                 File playerHomesFile = new File(homesFolder, playerUuidString + ".yml");
                 YamlConfiguration homesConfig = new YamlConfiguration();
                 try {
-                    homesConfig.load(playerHomesFile);
+                    if (!playerHomesFile.exists()) {
+                        playerHomesFile.createNewFile();
+                    } else {
+                        homesConfig.load(playerHomesFile);
+                    }
                 } catch (IOException | InvalidConfigurationException ex) {
                     Logger.getLogger(Settings.class.getName()).log(Level.SEVERE, null, ex);
                     return;
                 }
-                config.set(home + ".world", location.getWorld().getName());
-                config.set(home + ".x", location.getX());
-                config.set(home + ".y", location.getY());
-                config.set(home + ".z", location.getZ());
-                config.set(home + ".yaw", location.getYaw());
-                config.set(home + ".pitch", location.getPitch());
+                homesConfig.set(home + ".world", location.getWorld().getName());
+                homesConfig.set(home + ".x", location.getX());
+                homesConfig.set(home + ".y", location.getY());
+                homesConfig.set(home + ".z", location.getZ());
+                homesConfig.set(home + ".yaw", location.getYaw());
+                homesConfig.set(home + ".pitch", location.getPitch());
                 try {
                     homesConfig.save(playerHomesFile);
                 } catch (IOException ex) {
@@ -230,11 +233,11 @@ public final class Settings {
     public List<Player> getMuteList() {
         return muteList;
     }
-    
+
     public Map<UUID, SelectionType> getPosSelections() {
         return pos;
     }
-    
+
     public SelectionType getPosSelection(Player player) {
         if (pos.containsKey(player.getUniqueId())) {
             return pos.get(player.getUniqueId());
@@ -242,7 +245,7 @@ public final class Settings {
             return null;
         }
     }
-    
+
     public void removePosSelection(Player player) {
         pos.remove(player.getUniqueId());
     }
@@ -251,7 +254,7 @@ public final class Settings {
         SelectionType selection = getPosSelection(player);
         if (selection == null) {
             selection = new SelectionType();
-        } 
+        }
         pos1 = new Vector(pos1.getBlockX(), pos1.getBlockY(), pos1.getBlockZ());
         selection.setPos1(pos1.toBlockVector());
         pos.put(player.getUniqueId(), selection);
@@ -261,7 +264,7 @@ public final class Settings {
         SelectionType selection = getPosSelection(player);
         if (selection == null) {
             selection = new SelectionType();
-        } 
+        }
         pos2 = new Vector(pos2.getBlockX(), pos2.getBlockY(), pos2.getBlockZ());
         selection.setPos2(pos2.toBlockVector());
         pos.put(player.getUniqueId(), selection);
