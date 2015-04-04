@@ -6,6 +6,7 @@
 package io.github.chrisbotcom.boomerang.commands;
 
 import io.github.chrisbotcom.boomerang.Boomerang;
+import io.github.chrisbotcom.boomerang.commands.tabcomplete.HomeTabComplete;
 import java.util.Set;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -23,6 +24,7 @@ public class CommandDelHome implements CommandExecutor {
 
     public CommandDelHome(Boomerang plugin) {
         this.plugin = plugin;
+        plugin.getCommand("delhome").setTabCompleter(new HomeTabComplete(plugin));
     }
 
     @Override

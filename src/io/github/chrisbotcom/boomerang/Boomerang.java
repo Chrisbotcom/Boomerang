@@ -5,6 +5,12 @@
  */
 package io.github.chrisbotcom.boomerang;
 
+import io.github.chrisbotcom.boomerang.builtincommands.CommandFill;
+import io.github.chrisbotcom.boomerang.builtincommands.CommandClone;
+import io.github.chrisbotcom.boomerang.builtincommands.CommandExecute;
+import io.github.chrisbotcom.boomerang.builtincommands.CommandParticle;
+import io.github.chrisbotcom.boomerang.builtincommands.CommandPlaysound;
+import io.github.chrisbotcom.boomerang.builtincommands.CommandSetblock;
 import io.github.chrisbotcom.boomerang.commands.*;
 import io.github.chrisbotcom.boomerang.commands.tprequest.Requests;
 import io.github.chrisbotcom.boomerang.listeners.*;
@@ -22,7 +28,6 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author chrisbot
  */
 public class Boomerang extends JavaPlugin implements Listener {
-
     private Settings settings;
     private Requests tpRequests;
 
@@ -51,7 +56,7 @@ public class Boomerang extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new ListenerPlayerPreprocessCommand(), this);
         getServer().getPluginManager().registerEvents(new ListenerPlayerRespawn(this), this);
         
-        getServer().getPluginManager().registerEvents(new ListenerPlayerChatTabComplete(this), this);
+        
         //getServer().getPluginManager().registerEvents(new ListenerCreatureSpawn(this), this);
 
         getCommand("setworldspawn").setExecutor(new CommandSetWorldSpawn(this));
@@ -70,14 +75,24 @@ public class Boomerang extends JavaPlugin implements Listener {
         getCommand("nightvision").setExecutor(new CommandNightvision(this));
         getCommand("mute").setExecutor(new CommandMute(this));
         getCommand("unmute").setExecutor(new CommandUnmute(this));
+        getCommand("info").setExecutor(new CommandInfo(this));
 //        getCommand("pos").setExecutor(new CommandPos(this));
 //        getCommand("pos1").setExecutor(new CommandPos1(this));
 //        getCommand("pos2").setExecutor(new CommandPos2(this));
 //        getCommand("regen").setExecutor(new CommandRegen(this));
+        
+        // Built-in Minecraft commands.
+        getCommand("fill").setExecutor(new CommandFill(this));
+        getCommand("clone").setExecutor(new CommandClone(this));
+        getCommand("execute").setExecutor(new CommandExecute(this));
+        getCommand("particle").setExecutor(new CommandParticle(this));
+        getCommand("playsound").setExecutor(new CommandPlaysound(this));
+        getCommand("setblock").setExecutor(new CommandSetblock(this));
     }
 
     @Override
     public void onDisable() {
+        //this.protocolManager.removePacketListener(listenerPacket);
         Bukkit.getScheduler().cancelTasks(this);
     }
     

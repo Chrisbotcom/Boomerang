@@ -7,15 +7,13 @@ package io.github.chrisbotcom.boomerang.commands;
 
 import io.github.chrisbotcom.boomerang.Boomerang;
 import io.github.chrisbotcom.boomerang.types.SelectionType;
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.generator.ChunkGenerator;
 
 /**
  *
@@ -50,10 +48,20 @@ public class CommandRegen implements CommandExecutor {
             int x2 = Math.max(selection.getPos1().getBlockX(), selection.getPos2().getBlockX()) >> 4;
             int z1 = Math.min(selection.getPos1().getBlockZ(), selection.getPos2().getBlockZ()) >> 4;
             int z2 = Math.max(selection.getPos1().getBlockZ(), selection.getPos2().getBlockZ()) >> 4;
-
+            
             for (int i = x1; i <= x2; i++) {
                 for (int j = z1; j <= z2; j++) {
-                    world.regenerateChunk(i, j);
+                    if (world.unloadChunk(i, j)) {
+                        if (world.regenerateChunk(i, j)) {
+                            world.loadChunk(i, j);
+                            player.sendMessage(ChatColor.GREEN + "Regenerated chunk.");
+                        } else {
+                            player.sendMessage(ChatColor.RED + "Could not regenerate chunk.");
+                        }
+                    } else {
+                        player.sendMessage(ChatColor.RED + "Could not unload chunk.");
+                    }
+                    
                 }
             }
             sender.sendMessage(ChatColor.YELLOW + "Chunks regnerated.");
