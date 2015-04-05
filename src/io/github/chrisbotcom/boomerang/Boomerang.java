@@ -76,6 +76,10 @@ public class Boomerang extends JavaPlugin implements Listener {
         getCommand("mute").setExecutor(new CommandMute(this));
         getCommand("unmute").setExecutor(new CommandUnmute(this));
         getCommand("info").setExecutor(new CommandInfo(this));
+        getCommand("setwarp").setExecutor(new CommandSetWarp(this));
+        getCommand("delwarp").setExecutor(new CommandDelWarp(this));
+        getCommand("warp").setExecutor(new CommandWarp(this));
+//        getCommand("permissions").setExecutor(new CommandPermissions(this));
 //        getCommand("pos").setExecutor(new CommandPos(this));
 //        getCommand("pos1").setExecutor(new CommandPos1(this));
 //        getCommand("pos2").setExecutor(new CommandPos2(this));
